@@ -1,4 +1,4 @@
-# NB-IoT Loggers Integration
+# NB-IoT loggers integration
 
 This tutorial explains how to set up a simple CoAP server in Python to receive data from Efento NB-IoT loggers and store measurements in a PostgreSQL database. The example also demonstrates basic two-way communication, including requesting device information, and supports extended configuration messages used by newer Efento devices. Although this tutorial uses Python and PostgreSQL, the same approach can be implemented using other programming languages and databases.
 
@@ -6,7 +6,7 @@ If you have any questions or encounter issues, please contact us at [help.efento
 
 ## How does it work?
 
-### Measurement Processing and Server Responses
+### Measurement processing and server responses
 
 Efento NB-IoT loggers communicate with the server using CoAP (Constrained Application Protocol), while the transmitted data is encoded using Protocol Buffers (Protobuf). CoAP is a lightweight protocol designed for devices with limited resources, and Protobuf provides a compact binary format for serializing structured data. Together, they reduce communication overhead and the amount of data transmitted over the NB-IoT network, helping minimize energy consumption and support a battery lifetime of up to 8 years, depending on operating conditions.
 
@@ -24,7 +24,7 @@ The diagram below illustrates the measurement handling process, from receiving a
 
 For more information about CoAP and Protobuf, visit the [Efento Knowledge Library](https://getefento.com/libraries/).
 
-### Other Message Types
+### Other message types
 
 In addition to measurement data, Efento NB-IoT loggers send several types of messages to the server, including configuration updates, diagnostic information and time synchronization requests. These messages allow the server to monitor device operation, receive configuration information and support communication with the loggers.
 
@@ -79,7 +79,7 @@ Replace `your_password_here` with the password you set during installation. If y
 
 These settings will later be added to the `.env` file used by the Python server.
 
-### Create Table
+### Create table
 
 To store measurements received from Efento NB-IoT loggers, you need to create a table in your PostgreSQL database.
 
@@ -113,9 +113,9 @@ To create the table using pgAdmin:
 
 If the query executes successfully, PostgreSQL creates an empty table named `measurements`. The CoAP server will use this table to store measurements received from Efento loggers.
 
-## CoAP Server
+## CoAP server
 
-### Python Dependencies
+### Python dependencies
 
 Before running the CoAP server, install the Python libraries required by the example script:
 
@@ -187,7 +187,7 @@ To decode these messages, the server needs Python classes generated from Efento'
 
    These modules are required to run the example server. They are not included in the integration repository and must be generated before starting the application.
 
-### Running the CoAP Server
+### Running the CoAP server
 
 Once the required Python libraries are installed and the Protobuf modules have been generated, you can configure and start the CoAP server.
 
@@ -242,11 +242,11 @@ Once the required Python libraries are installed and the Protobuf modules have b
 
    > A successfully started server does not necessarily mean that it is reachable from the NB-IoT network. The destination address, firewall rules and any required UDP port forwarding must also be configured correctly.
 
-## NB-IoT Logger Configuration
+## NB-IoT logger configuration
 
 Configuration of Efento NB-IoT loggers is performed using the Efento mobile application, available from [Google Play](https://play.google.com/store/apps/details?id=pl.efento.cloud) / [App Store](https://apps.apple.com/pl/app/efento/id6479740909).
 
-### Check the NB-IoT Network Connection
+### Check the NB-IoT network connection
 
 Before configuring the destination server, make sure the logger is registered with the NB-IoT network and that its APN settings allow communication with the server.
 
@@ -262,7 +262,7 @@ To check the network connection:
 
 These statuses indicate that the logger is registered with the cellular network, but they do not necessarily mean that it can successfully communicate with your CoAP server.
 
-### Configure the Destination Server
+### Configure the destination server
 
 To configure the logger to send data to your own CoAP server:
 
@@ -306,7 +306,7 @@ If multiple loggers send data to the same server, their measurements are stored 
 
 *Figure 5. Measurement data received from Efento NB-IoT loggers and stored in PostgreSQL.*
 
-## Two-Way Communication
+## Two-way communication
 
 Efento NB-IoT loggers support two-way communication, allowing the server not only to receive measurements and diagnostic information but also to send requests and configuration updates to the devices.
 
@@ -342,7 +342,7 @@ The information received from the logger is decoded and saved to the `Deviceinfo
 
 Modem diagnostic parameters are stored as an array of numerical values. For a detailed explanation of these values for the Quectel BC660 modem, refer to the [`modem_parameters.md`](modem_parameters.md) file located in the main project directory.
 
-### How Does Two-Way Communication Work?
+### How does two-way communication work?
 
 When the logger sends a confirmable measurement message (`/m`), the server processes and saves the received data in PostgreSQL. If the operation succeeds, the server responds with an acknowledgement (ACK) containing the **2.01 Created** response code and the `device_info_request` flag set to `true`.
 
